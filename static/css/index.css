@@ -254,20 +254,24 @@ body {
 }
 
 .results-carousel {
+  max-width: 1120px;
+  margin: 0 auto;
   overflow: hidden;
   padding: 1rem 0;
 }
 
 .results-carousel .item {
+  display: flex;
+  flex-direction: column;
   margin: 1rem;
   overflow: hidden;
   padding: 1.5rem;
-  font-size: 0;
   background: var(--background-primary);
   border-radius: var(--border-radius-lg);
   box-shadow: var(--shadow-md);
   transition: var(--transition);
   border: 1px solid var(--border-color);
+  min-height: 620px;
 }
 
 .results-carousel .item:hover {
@@ -275,19 +279,35 @@ body {
   box-shadow: var(--shadow-lg);
 }
 
+.results-carousel .carousel-figure {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  width: 100%;
+  height: clamp(320px, 48vw, 500px);
+  background: var(--background-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  overflow: hidden;
+}
+
 .results-carousel .item img,
 .results-carousel video {
+  display: block;
   margin: 0;
-  border-radius: var(--border-radius);
   width: 100%;
-  height: auto;
+  height: 100%;
+  object-fit: contain;
 }
 
 .results-carousel .subtitle {
   font-size: 1rem !important;
   color: var(--text-secondary);
   margin-top: 1rem;
+  margin-bottom: 0;
   font-weight: 500;
+  min-height: 3.75rem;
 }
 
 /* Pagination and Misc Improvements */
@@ -645,6 +665,15 @@ code {
   .results-carousel .item {
     margin: 0.5rem;
     padding: 1rem;
+    min-height: 500px;
+  }
+
+  .results-carousel .carousel-figure {
+    height: clamp(240px, 58vw, 360px);
+  }
+
+  .results-carousel .subtitle {
+    min-height: 4.5rem;
   }
   
   .teaser .hero-body {
@@ -693,6 +722,19 @@ code {
   .button {
     width: 100%;
     justify-content: center;
+  }
+
+  .results-carousel .item {
+    min-height: 420px;
+  }
+
+  .results-carousel .carousel-figure {
+    height: 260px;
+  }
+
+  .results-carousel .subtitle {
+    font-size: 0.9rem !important;
+    min-height: 5rem;
   }
 }
 
@@ -748,6 +790,4 @@ a:focus {
     box-shadow: none !important;
   }
 }
-
-
 
