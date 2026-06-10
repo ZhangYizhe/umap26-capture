@@ -119,6 +119,54 @@ function setupVideoCarouselAutoplay() {
     });
 }
 
+function setupCarouselHoverPause(carousels) {
+    carousels.forEach(function(carousel) {
+        const hoverRoot = carousel.wrapper || carousel.element;
+        const hoverTargets = [carousel.element, carousel.wrapper, carousel.container].filter(Boolean);
+        const autoplay = carousel._autoplay;
+        let isHoverPaused = false;
+
+        if (hoverTargets.length === 0 || !autoplay) return;
+
+        const pauseAutoplay = function() {
+            if (isHoverPaused) return;
+
+            isHoverPaused = true;
+            carousel._wasAutoplayingBeforeHover = carousel.options.autoplay;
+            carousel.options.autoplay = false;
+            autoplay._hovering = true;
+            autoplay.stop();
+        };
+
+        const resumeAutoplay = function() {
+            if (!isHoverPaused) return;
+
+            isHoverPaused = false;
+            autoplay._hovering = false;
+            carousel.options.autoplay = carousel._wasAutoplayingBeforeHover !== false;
+            if (carousel.options.autoplay) {
+                autoplay.start();
+            }
+        };
+
+        const resumeWhenPointerLeavesCarousel = function(event) {
+            if (hoverRoot && !hoverRoot.contains(event.target)) {
+                resumeAutoplay();
+            }
+        };
+
+        hoverTargets.forEach(function(hoverTarget) {
+            hoverTarget.addEventListener('mouseenter', pauseAutoplay, true);
+            hoverTarget.addEventListener('mousemove', pauseAutoplay, true);
+            hoverTarget.addEventListener('mouseleave', resumeAutoplay, true);
+            hoverTarget.addEventListener('focusin', pauseAutoplay, true);
+            hoverTarget.addEventListener('focusout', resumeAutoplay, true);
+        });
+
+        document.addEventListener('mousemove', resumeWhenPointerLeavesCarousel, true);
+    });
+}
+
 $(document).ready(function() {
     // Check for click events on the navbar burger icon
 
@@ -129,10 +177,12 @@ $(document).ready(function() {
 		infinite: true,
 		autoplay: true,
 		autoplaySpeed: 5000,
+        pauseOnHover: true,
     }
 
 	// Initialize all div with carousel class
     var carousels = bulmaCarousel.attach('.carousel', options);
+    setupCarouselHoverPause(carousels);
 	
     bulmaSlider.attach();
     
